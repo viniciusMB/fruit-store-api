@@ -23,7 +23,7 @@ exports.getOrders = (req, res, next) => {
                              request: {
                                  type: 'GET',
                                  description: 'Returns a specifc order',
-                                 url: 'http://localhost:3000/orders/' + order.order_id
+                                 url: proces.env.URL_API +'orders/' + order.order_id
                                 }
                             }
                         })
@@ -64,7 +64,7 @@ exports.getOrdersById = (req, res, next) => {
                         request: {
                             type: 'GET',
                             description: 'Returns all orders',
-                            url: 'http://localhost:3000/orders'
+                            url: proces.env.URL_API +'orders'
                         }
 
                     }
@@ -102,7 +102,7 @@ exports.postOrder = (req, res, next) => {
                             request: {
                                 type: 'GET',
                                 description: 'Returns all orders',
-                                url: 'http://localhost:3000/orders'
+                                url: proces.env.URL_API +'orders'
                             }
     
                         }
@@ -128,7 +128,7 @@ exports.deleteOrder = (req, res, next) => {
                     request: {
                         type: 'POST',
                         descricao: 'Post an order',
-                        url: 'http://localhost:3000/orders',
+                        url: proces.env.URL_API +'orders',
                         body: {
                             costumer: 'Number'
                         }
