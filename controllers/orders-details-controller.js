@@ -27,7 +27,7 @@ exports.postOrderDetails = (req, res, next) => {
                             request: {
                                 type: 'PATCH',
                                 description: 'Updates an order details',
-                                url: proces.env.URL_API +'ordersdetails'
+                                url: process.env.URL_API +'ordersdetails'
                             }
     
                         }
@@ -67,7 +67,7 @@ exports.updateOrderDetails = (req,res,next) => {
                             request: {
                                 type: 'POST',
                                 description: 'Posts an order details',
-                                url: proces.env.URL_API +'orderdetails' + req.body.orderd_id
+                                url: process.env.URL_API +'orderdetails' + req.body.orderd_id
                             }
 
                         }

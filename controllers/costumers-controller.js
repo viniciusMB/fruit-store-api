@@ -22,7 +22,7 @@ exports.getCostumers = (req, res, next) => {
                              request: {
                                  tipo: 'GET',
                                  description: 'Returns a specifc costumer',
-                                 url: proces.env.URL_API +'costumers/' + costumer.costumer_id
+                                 url: process.env.URL_API +'costumers/' + costumer.costumer_id
                                 }
                             }
                         })
@@ -57,7 +57,7 @@ exports.getCostumerById = (req, res, next) => {
                         request: {
                             type: 'GET',
                             description: 'Returns this costumer details',
-                            url: proces.env.URL_API +'costumers/details/' + result[0].costumer_id
+                            url: process.env.URL_API +'costumers/details/' + result[0].costumer_id
                         }
 
                     }
@@ -100,7 +100,7 @@ exports.postCostumer = (req, res, next) => {
                                     request: {
                                         type: 'GET',
                                         description: 'Returns a specific costumer',
-                                        url: proces.env.URL_API +'costumers/' + result.costumer_id
+                                        url: process.env.URL_API +'costumers/' + result.costumer_id
                                     }
             
                                 }
@@ -138,7 +138,7 @@ exports.updateCostumer = (req,res,next) => {
                         request: {
                             type: 'GET',
                             description: 'Returns a specific costumer',
-                            url: proces.env.URL_API +'costumers' + req.body.costumer_id
+                            url: process.env.URL_API +'costumers' + req.body.costumer_id
                         }
 
                     }
@@ -163,7 +163,7 @@ exports.deleteCostumer = (req, res, next) => {
                     request: {
                         type: 'POST',
                         description: 'Post a costumer',
-                        url: proces.env.URL_API +'costumers',
+                        url: process.env.URL_API +'costumers',
                         body: {
                             name: 'String',
                             cpf: 'Number',
@@ -225,7 +225,7 @@ exports.getCostumerDetails = (req, res, next) => {
                                 request: {
                                     tipo: 'GET',
                                     descriçao: 'Returns all costumers',
-                                    url: proces.env.URL_API +'costumers'
+                                    url: process.env.URL_API +'costumers'
                                 }
                             }
                             
