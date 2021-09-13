@@ -4,25 +4,25 @@ const jwt = require('jsonwebtoken');
 const validator = require("email-validator");
 
 
-exports.getCostumers = (req, res, next) => {
+exports.getCustomers = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({error: error})}
-         conn.query(`SELECT * FROM costumers`,
+         conn.query(`SELECT * FROM customers`,
              (error, result, fields) => {
                  if(error) { return res.status(500).send({error: error})}
                  const response = {
-                     totalCostumers: result.length,
-                     costumers: result.map(costumer => {
+                     totalCustomers: result.length,
+                     customers: result.map(customer => {
                          return {
-                             costumer_id: costumer.costumer_id,
-                             name: costumer.name,
-                             cpf: costumer.cpf,
-                             phone: costumer.phone,
-                             order_id: costumer.order_id,
+                             customer_id: customer.customer_id,
+                             name: customer.name,
+                             cpf: customer.cpf,
+                             phone: customer.phone,
+                             order_id: customer.order_id,
                              request: {
                                  tipo: 'GET',
-                                 description: 'Returns a specifc costumer',
-                                 url: process.env.URL_API +'costumers/' + costumer.costumer_id
+                                 description: 'Returns a specifc customer',
+                                 url: process.env.URL_API +'customers/' + customer.customer_id
                                 }
                             }
                         })
@@ -34,30 +34,30 @@ exports.getCostumers = (req, res, next) => {
     })
 };
 
-exports.getCostumerById = (req, res, next) => {
+exports.getCustomerById = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({error: error})}
-         conn.query(`SELECT * FROM costumers WHERE costumer_id = ?`,
-             [req.costumer.costumer_id],
+         conn.query(`SELECT * FROM customers WHERE customer_id = ?`,
+             [req.customer.customer_id],
              (error, result, field) => {
                 conn.release();
                 if (error) { return res.status(500).send({ error: error}) }
                 
                 if (result.length == 0){
                     return res.status(404).send({
-                        message: 'Costumer Id not found'
+                        message: 'Customer Id not found'
                     })
                 }                
                 const response = {
                     
-                    costumers: {
-                        costumer_id: result[0].costumer_id,
+                    customers: {
+                        customer_id: result[0].customer_id,
                         name: result[0].name,
                         cpf: result[0].cpf,
                         request: {
                             type: 'GET',
-                            description: 'Returns this costumer details',
-                            url: process.env.URL_API +'costumers/details/' + result[0].costumer_id
+                            description: 'Returns this customer details',
+                            url: process.env.URL_API +'customers/details/' + result[0].customer_id
                         }
 
                     }
@@ -69,14 +69,14 @@ exports.getCostumerById = (req, res, next) => {
     })
 };
 
-exports.postCostumer = (req, res, next) => {
+exports.postCustomer = (req, res, next) => {
 
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        conn.query('SELECT * FROM costumers WHERE email = ?', [req.body.email],(error, results) => {
+        conn.query('SELECT * FROM customers WHERE email = ?', [req.body.email],(error, results) => {
             if (error) { return res.status(500).send({ error: error}) }
             if (results.length > 0){
-                return res.status(409).send({message: 'Costumer already exists' })
+                return res.status(409).send({message: 'Customer already exists' })
             }
             if (validator.validate(req.body.email)) {
                 return res.status(409).send({ message: 'Invalid email'})
@@ -85,22 +85,22 @@ exports.postCostumer = (req, res, next) => {
                 bcrypt.hash(req.body.password, 10, (errBcrypt, hash) => {
                     if (errBcrypt) { return res.status(500).send({error: errBcrypt})}
                     conn.query(
-                        'INSERT INTO costumers (name, cpf, phone, email, password) VALUES (?,?,?,?,?)',
+                        'INSERT INTO customers (name, cpf, phone, email, password) VALUES (?,?,?,?,?)',
                         [req.body.name, req.body.cpf, req.body.phone, req.body.email, hash],
                         (error, result, field) => {
                             conn.release();
                             if (error) { return res.status(500).send({ error: error}) }
                             const response = {
-                                message: 'Costumer added sucessfully',
+                                message: 'Customer added sucessfully',
                                 clienteNovo: {
-                                    costumer_id: result.costumer_id,
+                                    customer_id: result.customer_id,
                                     name: req.body.name,
                                     cpf: req.body.cpf,
                                     phone: req.body.phone,
                                     request: {
                                         type: 'GET',
-                                        description: 'Returns a specific costumer',
-                                        url: process.env.URL_API +'costumers/' + result.costumer_id
+                                        description: 'Returns a specific customer',
+                                        url: process.env.URL_API +'customers/' + result.customer_id
                                     }
             
                                 }
@@ -118,27 +118,27 @@ exports.postCostumer = (req, res, next) => {
 };
 
 
-exports.updateCostumer = (req,res,next) => {
+exports.updateCustomer = (req,res,next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({error: error})}
         conn.query(
-            `UPDATE costumers SET name = ?, cpf = ?, phone = ? WHERE costumer_id = ?`,
-            [req.body.name, req.body.cpf, req.body.phone, req.costumer.costumer_id],
+            `UPDATE customers SET name = ?, cpf = ?, phone = ? WHERE customer_id = ?`,
+            [req.body.name, req.body.cpf, req.body.phone, req.customer.customer_id],
             (error, result, field) => {
                 conn.release();
 
                 if (error) { return res.status(500).send({ error: error }) }
                 const response = {
-                    message: 'Costumer updated sucessfully',
+                    message: 'Customer updated sucessfully',
                     ProductUpdated: {
-                        costumer_id: req.body.costumer_id,
+                        customer_id: req.body.customer_id,
                         name: req.body.name,
                         cpf: req.body.cpf,
                         phone: req.body.phone,
                         request: {
                             type: 'GET',
-                            description: 'Returns a specific costumer',
-                            url: process.env.URL_API +'costumers' + req.body.costumer_id
+                            description: 'Returns a specific customer',
+                            url: process.env.URL_API +'customers' + req.body.customer_id
                         }
 
                     }
@@ -150,20 +150,20 @@ exports.updateCostumer = (req,res,next) => {
     });
 };
 
-exports.deleteCostumer = (req, res, next) => {
+exports.deleteCustomer = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({error: error})}
         conn.query(
-            "DELETE FROM costumers WHERE costumer_id = ?", [req.params.costumer_id],
+            "DELETE FROM customers WHERE customer_id = ?", [req.params.customer_id],
             (error, result, fields) => {
                 conn.release();
                 if (error) { return res.status(500).send({ error: error}) }
                 const response = {
-                    message: 'Costumer removed sucessfully',
+                    message: 'Customer removed sucessfully',
                     request: {
                         type: 'POST',
-                        description: 'Post a costumer',
-                        url: process.env.URL_API +'costumers',
+                        description: 'Post a customer',
+                        url: process.env.URL_API +'customers',
                         body: {
                             name: 'String',
                             cpf: 'Number',
@@ -177,20 +177,20 @@ exports.deleteCostumer = (req, res, next) => {
     });
 };
 
-exports.getCostumerDetails = (req, res, next) => {
+exports.getCustomerDetails = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({error: error})}
-         conn.query(`SELECT * FROM costumers 
-         INNER JOIN orders ON ? = costumer 
+         conn.query(`SELECT * FROM customers 
+         INNER JOIN orders ON ? = customer 
          INNER JOIN order_details ON order_id = orderd_id 
-         INNER JOIN fruits ON product = product_id WHERE 1=1 AND costumer_id = ?;`, 
-         [req.costumer.costumer_id, req.costumer.costumer_id],
+         INNER JOIN fruits ON product = product_id WHERE 1=1 AND customer_id = ?;`, 
+         [req.customer.customer_id, req.customer.customer_id],
              (error, result, field) => {
                 conn.release();
                 if (error) { return res.status(500).send({ error: error}) }                
                 if (result.length == 0){
                     return res.status(404).send({
-                        mensagem: 'Costumer details not found'
+                        mensagem: 'Customer details not found'
                     })
                 }
                 var orderMap = new Map;
@@ -203,29 +203,29 @@ exports.getCostumerDetails = (req, res, next) => {
                         price: result[i].price
                     });
                 }
-                var costumerobj = new Object;
+                var customerobj = new Object;
 
                 const response = {
                     
-                    costumer: {
-                        costumer_id: result[0].costumer_id,
+                    customer: {
+                        customer_id: result[0].customer_id,
                         name: result[0].name,
                         cpf: result[0].cpf,
                         phone: result[0].phone,
-                        orders: result.map(costumer => {
+                        orders: result.map(customer => {
                             
-                            costumerobj = orderMap.get(costumer.detailsId);
+                            customerobj = orderMap.get(customer.detailsId);
                             return {
-                                orderID:costumerobj.orderID,
-                                productName: costumerobj.productName,
-                                quantity: costumerobj.quantity,
-                                price: costumerobj.price,
-                                totalPrice: costumerobj.price * costumerobj.quantity,
+                                orderID:customerobj.orderID,
+                                productName: customerobj.productName,
+                                quantity: customerobj.quantity,
+                                price: customerobj.price,
+                                totalPrice: customerobj.price * customerobj.quantity,
 
                                 request: {
                                     tipo: 'GET',
-                                    descriçao: 'Returns all costumers',
-                                    url: process.env.URL_API +'costumers'
+                                    descriçao: 'Returns all customers',
+                                    url: process.env.URL_API +'customers'
                                 }
                             }
                             

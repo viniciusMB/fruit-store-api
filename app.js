@@ -5,7 +5,7 @@ const morgan = require('morgan');
 
 const routeProducts = require('./routes/produtcs');
 const routeOrders = require('./routes/orders');
-const routeCostumers = require('./routes/costumers');
+const routeCustomers = require('./routes/customers');
 const routeOrdersDetails = require('./routes/orders-details');
 const routeAuthentication = require('./routes/authentication');
 
@@ -30,7 +30,7 @@ app.use((req, res,next) => {
 
 app.use('/products', routeProducts);
 app.use('/orders', routeOrders);
-app.use('/costumers', routeCostumers);
+app.use('/customers', routeCustomers);
 app.use('/orderdetails', routeOrdersDetails);
 app.use('/login', routeAuthentication);
 

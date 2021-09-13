@@ -79,18 +79,18 @@ exports.getOrdersById = (req, res, next) => {
 exports.postOrder = (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if(error) { return res.status(500).send({ error: error }) }
-        conn.query('SELECT * FROM costumers WHERE costumer_id = ?', 
-        [req.costumer.costumer_id], 
+        conn.query('SELECT * FROM customers WHERE customer_id = ?', 
+        [req.customer.customer_id], 
         (error, result, field) => {
             if (error) { return res.status(500).send({ error: error}) }
             if (result.length == 0){
                 return res.status(404).send({
-                    message: 'Costumer not found'
+                    message: 'Customer not found'
                 })
             }
             conn.query(
-                'INSERT INTO orders (costumer) VALUES (?)',
-                [req.costumer.costumer_id],
+                'INSERT INTO orders (customer) VALUES (?)',
+                [req.customer.customer_id],
                 (error, result, field) => {
                     conn.release();
                     if (error) { return res.status(500).send({ error: error}) }
@@ -98,7 +98,7 @@ exports.postOrder = (req, res, next) => {
                         message: 'Order posted sucessfully',
                         newOrder: {
                             order_id: result.order_id,
-                            costumer: req.body.costumer,
+                            customer: req.body.customer,
                             request: {
                                 type: 'GET',
                                 description: 'Returns all orders',
@@ -130,7 +130,7 @@ exports.deleteOrder = (req, res, next) => {
                         descricao: 'Post an order',
                         url: process.env.URL_API +'orders',
                         body: {
-                            costumer: 'Number'
+                            customer: 'Number'
                         }
                     }
                 }

@@ -16,33 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `costumers`
+-- Table structure for table `customers`
 --
 
-DROP TABLE IF EXISTS `costumers`;
+DROP TABLE IF EXISTS `customers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `costumers` (
+CREATE TABLE `customers` (
   `name` varchar(30) NOT NULL,
   `cpf` char(11) NOT NULL,
   `phone` varchar(11) DEFAULT NULL,
-  `costumer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  PRIMARY KEY (`costumer_id`),
+  PRIMARY KEY (`customer_id`),
   UNIQUE KEY `cpf` (`cpf`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `costumers`
+-- Dumping data for table `customers`
 --
 
-LOCK TABLES `costumers` WRITE;
-/*!40000 ALTER TABLE `costumers` DISABLE KEYS */;
-INSERT INTO `costumers` VALUES ('joãozinho','04698536323','71996784469',8,'joazinho123@gmail.com','$2b$10$oS7bztlFW02/pFRkpD8ZF.AbauzrgOGeI.fgf6ohrjyY7evV7X8nK');
-/*!40000 ALTER TABLE `costumers` ENABLE KEYS */;
+LOCK TABLES `customers` WRITE;
+/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `customers` VALUES ('joãozinho','04698536323','71996784469',8,'joazinho123@gmail.com','$2b$10$oS7bztlFW02/pFRkpD8ZF.AbauzrgOGeI.fgf6ohrjyY7evV7X8nK');
+/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -108,10 +108,10 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT,
-  `costumer` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
   PRIMARY KEY (`order_id`),
-  KEY `costumer_fk` (`costumer`),
-  CONSTRAINT `costumer_fk` FOREIGN KEY (`costumer`) REFERENCES `costumers` (`costumer_id`) ON DELETE CASCADE
+  KEY `customer_fk` (`customer`),
+  CONSTRAINT `customer_fk` FOREIGN KEY (`customer`) REFERENCES `customers` (`customer_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
